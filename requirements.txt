@@ -1,0 +1,10 @@
+gTTS
+joblib
+numpy
+pandas
+pillow
+pymongo
+scikit-learn
+SpeechRecognition
+streamlit
+tensorflow
