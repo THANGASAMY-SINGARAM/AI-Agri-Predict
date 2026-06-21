@@ -34,6 +34,38 @@ from i18n import (
 )
 
 
+FALLBACK_UI_TEXT = {
+    "tab_yield": "Yield Prediction",
+    "tab_classifier": "Classifier",
+    "tab_fertilizer": "Fertilizer",
+    "tab_chatbot": "Agri Chatbot",
+    "tab_database": "Database",
+}
+
+
+def readable_key(key):
+    text = key.removeprefix("tab_").replace("_", " ")
+    return text.title()
+
+
+def ui_text(language, key):
+    try:
+        value = tr(language, key)
+        if value != key:
+            return value
+    except KeyError:
+        pass
+
+    try:
+        value = tr("en", key)
+        if value != key:
+            return value
+    except KeyError:
+        pass
+
+    return FALLBACK_UI_TEXT.get(key, readable_key(key))
+
+
 BASE_DIR = Path(__file__).resolve().parent
 YIELD_MODEL_PATH = BASE_DIR / "crop_yield_model.pkl"
 SOIL_MODEL_PATH = BASE_DIR / "soil_model.h5"
@@ -174,13 +206,6 @@ def apply_custom_theme():
                 color: #10281e;
             }}
 
-            .stApp p,
-            .stApp label,
-            .stApp span,
-            .stApp div {{
-                color: #18382b;
-            }}
-
             [data-testid="stSidebar"] {{
                 background: rgba(255, 255, 255, 0.92);
                 border-right: 1px solid rgba(31, 122, 77, 0.16);
@@ -225,11 +250,11 @@ def apply_custom_theme():
             .brand-panel {{
                 min-height: 520px;
                 border-radius: 8px;
-                padding: 34px;
+                padding: 38px;
                 position: relative;
                 overflow: hidden;
                 background:
-                    linear-gradient(145deg, rgba(12, 49, 34, 0.82), rgba(31, 122, 77, 0.64)),
+                    linear-gradient(145deg, rgba(6, 30, 21, 0.9), rgba(22, 91, 58, 0.7)),
                     url("{hero_image}");
                 background-size: cover;
                 background-position: center;
@@ -237,56 +262,111 @@ def apply_custom_theme():
                 box-shadow: 0 24px 70px rgba(15, 61, 43, 0.28);
             }}
 
+            .brand-panel,
+            .brand-panel div,
+            .brand-panel p,
+            .brand-panel span,
+            .brand-panel strong {{
+                color: #ffffff !important;
+            }}
+
+            .brand-kicker {{
+                display: inline-flex;
+                align-items: center;
+                gap: 10px;
+                margin-bottom: 18px;
+                color: #dfffee !important;
+                font-size: 0.84rem;
+                font-weight: 800;
+                letter-spacing: 0.08em;
+                text-shadow: 0 2px 12px rgba(0, 0, 0, 0.58);
+            }}
+
+            .leaf-mark {{
+                width: 22px;
+                height: 22px;
+                display: inline-block;
+                border-radius: 22px 0 22px 0;
+                background: linear-gradient(135deg, #d9ff66, #56d483);
+                box-shadow: 0 0 0 5px rgba(202, 255, 223, 0.14);
+                transform: rotate(-16deg);
+            }}
+
             .brand-panel h1 {{
-                color: white;
+                color: #ffffff !important;
                 font-size: clamp(2.2rem, 4vw, 4.3rem);
                 line-height: 1.02;
                 margin: 0 0 18px;
+                font-weight: 900;
+                text-shadow: 0 5px 26px rgba(0, 0, 0, 0.72);
             }}
 
             .brand-panel p {{
                 max-width: 640px;
                 font-size: 1.06rem;
                 line-height: 1.65;
-                color: rgba(255, 255, 255, 0.94);
+                color: rgba(255, 255, 255, 0.98) !important;
+                text-shadow: 0 2px 14px rgba(0, 0, 0, 0.58);
             }}
 
             .signal-grid {{
                 display: grid;
-                grid-template-columns: repeat(3, minmax(0, 1fr));
+                grid-template-columns: repeat(4, minmax(0, 1fr));
                 gap: 12px;
                 margin-top: 34px;
             }}
 
             .signal-card {{
-                border: 1px solid rgba(255, 255, 255, 0.24);
+                border: 1px solid rgba(223, 255, 238, 0.46);
                 border-radius: 8px;
                 padding: 16px;
-                background: rgba(255, 255, 255, 0.12);
+                background: rgba(4, 29, 20, 0.58);
                 backdrop-filter: blur(12px);
+                box-shadow: 0 12px 28px rgba(0, 0, 0, 0.16);
             }}
 
             .signal-card strong {{
                 display: block;
                 font-size: 1.5rem;
-                color: #ffffff;
+                color: #ffffff !important;
+                text-shadow: 0 2px 12px rgba(0, 0, 0, 0.56);
             }}
 
             .signal-card span {{
-                color: #dfffee;
+                color: #f1fff7 !important;
+                font-weight: 700;
+                text-shadow: 0 2px 12px rgba(0, 0, 0, 0.56);
+            }}
+
+            .trust-strip {{
+                display: flex;
+                flex-wrap: wrap;
+                gap: 10px;
+                margin-top: 18px;
+                max-width: 760px;
+            }}
+
+            .trust-pill {{
+                border-radius: 999px;
+                padding: 9px 14px;
+                color: #ffffff !important;
+                background: rgba(2, 18, 12, 0.78);
+                border: 1px solid rgba(202, 255, 223, 0.58);
+                font-size: 0.92rem;
+                font-weight: 800;
+                text-shadow: 0 2px 10px rgba(0, 0, 0, 0.7);
             }}
 
             .ai-band {{
-                position: absolute;
-                right: 26px;
-                bottom: 26px;
-                width: min(330px, calc(100% - 52px));
+                position: static;
+                width: min(420px, 100%);
                 border-radius: 8px;
                 padding: 18px;
+                margin-top: 18px;
                 background:
                     linear-gradient(90deg, rgba(255,255,255,0.18) 1px, transparent 1px),
                     linear-gradient(rgba(255,255,255,0.16) 1px, transparent 1px),
-                    rgba(6, 24, 18, 0.56);
+                    rgba(3, 18, 13, 0.78);
                 background-size: 28px 28px;
                 border: 1px solid rgba(255, 255, 255, 0.22);
             }}
@@ -296,13 +376,15 @@ def apply_custom_theme():
                 border-radius: 999px;
                 padding: 5px 10px;
                 background: rgba(180, 255, 213, 0.18);
-                color: #c8ffe2;
+                color: #dfffee !important;
                 font-weight: 700;
                 font-size: 0.78rem;
             }}
 
             .ai-band p {{
-                color: #effff6;
+                color: #ffffff !important;
+                font-weight: 700;
+                text-shadow: 0 2px 10px rgba(0, 0, 0, 0.64);
             }}
 
             .auth-card {{
@@ -324,25 +406,70 @@ def apply_custom_theme():
                 color: #17382b;
             }}
 
+            [data-testid="stTextInput"] input {{
+                background: #fbfffc;
+                color: #10281e !important;
+                border: 1.5px solid rgba(31, 122, 77, 0.42);
+                border-radius: 8px;
+            }}
+
+            [data-testid="stNumberInput"] input {{
+                background: #fbfffc;
+                color: #10281e !important;
+                border: 1.5px solid rgba(31, 122, 77, 0.42);
+            }}
+
+            [data-testid="stNumberInput"] button {{
+                background: #e7f7ee;
+                color: #0f3d2b !important;
+                border-color: rgba(31, 122, 77, 0.24);
+            }}
+
+            [data-testid="stNumberInput"] button * {{
+                color: #0f3d2b !important;
+            }}
+
+            [data-testid="stTextInput"] input:focus {{
+                border-color: #1f7a4d;
+                box-shadow: 0 0 0 3px rgba(31, 122, 77, 0.14);
+            }}
+
+            div[data-testid="stVerticalBlock"]:has(> div [data-testid="stForm"]) {{
+                background: rgba(255, 255, 255, 0.96);
+                border: 1px solid rgba(31, 122, 77, 0.18);
+                border-radius: 8px;
+                padding: 22px;
+                box-shadow: 0 18px 54px rgba(15, 61, 43, 0.14);
+            }}
+
             .stButton > button,
             .stFormSubmitButton > button {{
                 border-radius: 8px;
                 border: 0;
                 background: linear-gradient(135deg, var(--leaf), #2fa978);
-                color: white;
+                color: #ffffff !important;
                 font-weight: 700;
+            }}
+
+            .stButton > button *,
+            .stFormSubmitButton > button * {{
+                color: #ffffff !important;
             }}
 
             .stButton > button:hover,
             .stFormSubmitButton > button:hover {{
                 border: 0;
-                color: white;
+                color: #ffffff !important;
                 filter: brightness(0.96);
             }}
 
             div[data-testid="stTabs"] button {{
-                color: var(--leaf-dark);
+                color: var(--leaf-dark) !important;
                 font-weight: 650;
+            }}
+
+            div[data-testid="stTabs"] button * {{
+                color: var(--leaf-dark) !important;
             }}
 
             @media (max-width: 900px) {{
@@ -353,7 +480,6 @@ def apply_custom_theme():
                     min-height: 460px;
                 }}
                 .ai-band {{
-                    position: static;
                     width: auto;
                     margin-top: 24px;
                 }}
@@ -372,15 +498,24 @@ def render_login_page():
         st.markdown(
             """
             <section class="brand-panel">
+                <div class="brand-kicker"><span class="leaf-mark"></span><span>AI AGRI PREDICT</span></div>
                 <h1>AgriPredict</h1>
                 <p>
                     Agriculture intelligence for yield planning, soil and crop recognition,
                     fertilizer estimates, and fast farm guidance.
                 </p>
                 <div class="signal-grid">
-                    <div class="signal-card"><strong>AI</strong><span>Crop vision</span></div>
-                    <div class="signal-card"><strong>NPK</strong><span>Input planning</span></div>
-                    <div class="signal-card"><strong>Local</strong><span>MongoDB data</span></div>
+                    <div class="signal-card"><strong>AI</strong><span>Crop disease detection</span></div>
+                    <div class="signal-card"><strong>NPK</strong><span>Fertilizer recommendation</span></div>
+                    <div class="signal-card"><strong>Yield</strong><span>Crop yield prediction</span></div>
+                    <div class="signal-card"><strong>Voice</strong><span>Farmer advisory assistant</span></div>
+                </div>
+                <div class="trust-strip">
+                    <span class="trust-pill">Crop recommendation</span>
+                    <span class="trust-pill">Soil recognition</span>
+                    <span class="trust-pill">Yield prediction</span>
+                    <span class="trust-pill">Voice assistant</span>
+                    <span class="trust-pill">Weather intelligence ready</span>
                 </div>
                 <div class="ai-band">
                     <span>AI FIELD INTELLIGENCE</span>
@@ -392,9 +527,8 @@ def render_login_page():
         )
 
     with right:
-        st.markdown('<div class="auth-card">', unsafe_allow_html=True)
         st.subheader("Welcome Back")
-        st.caption("Sign in with your MongoDB-backed local account.")
+        st.caption("Sign in to access AI-powered agricultural insights.")
         login_tab, signup_tab = st.tabs(["Login", "Create Account"])
 
         with login_tab:
@@ -434,8 +568,6 @@ def render_login_page():
                         st.rerun()
                     except Exception as exc:
                         st.error(str(exc))
-
-        st.markdown("</div>", unsafe_allow_html=True)
 
     st.markdown("</div>", unsafe_allow_html=True)
 
@@ -582,13 +714,19 @@ yield_model = load_yield_model()
 soil_model, crop_model = load_image_models()
 soil_labels = load_class_labels(SOIL_CLASSES_PATH, SOIL_DATASET_DIR, SOIL_NAMES.keys())
 crop_labels = load_class_labels(CROP_CLASSES_PATH, CROP_DATASET_DIR, CROP_NAMES.keys())
-t = {"title": tr(lang, "title"), "instruction": tr(lang, "instruction")}
+t = {"title": ui_text(lang, "title"), "instruction": ui_text(lang, "instruction")}
 
 st.title(t["title"])
 st.write(t["instruction"])
 
 tab1, tab2, tab3, tab4, tab5 = st.tabs(
-    ["Yield Prediction", "Classifier", "Fertilizer", "Agri Chatbot", "Database"]
+    [
+        ui_text(lang, "tab_yield"),
+        ui_text(lang, "tab_classifier"),
+        ui_text(lang, "tab_fertilizer"),
+        ui_text(lang, "tab_chatbot"),
+        ui_text(lang, "tab_database"),
+    ]
 )
 
 with tab1:
@@ -597,19 +735,19 @@ with tab1:
     else:
         col1, col2 = st.columns(2)
         with col1:
-            temperature = st.number_input("Temperature (C)", value=25.0)
-            rainfall = st.number_input("Rainfall (mm)", value=1000.0)
-            irrigation = st.number_input("Irrigation (mm)", value=200.0)
-            fert = st.number_input("Fertilizer (kg)", value=100.0)
+            temperature = st.number_input(ui_text(lang, "temperature"), value=25.0)
+            rainfall = st.number_input(ui_text(lang, "rainfall"), value=1000.0)
+            irrigation = st.number_input(ui_text(lang, "irrigation"), value=200.0)
+            fert = st.number_input(ui_text(lang, "fertilizer_kg"), value=100.0)
         with col2:
-            n = st.number_input("Soil nitrogen", value=30.0)
-            p = st.number_input("Soil phosphorus", value=15.0)
-            k = st.number_input("Soil potassium", value=40.0)
+            n = st.number_input(ui_text(lang, "soil_nitrogen"), value=30.0)
+            p = st.number_input(ui_text(lang, "soil_phosphorus"), value=15.0)
+            k = st.number_input(ui_text(lang, "soil_potassium"), value=40.0)
 
-        if st.button("Speak input"):
+        if st.button(ui_text(lang, "speak_input")):
             recognize_speech_once()
 
-        if st.button("Predict yield", type="primary"):
+        if st.button(ui_text(lang, "predict_yield"), type="primary"):
             row = pd.DataFrame(
                 [[temperature, rainfall, irrigation, n, p, k, fert]],
                 columns=FEATURE_COLUMNS,
@@ -624,17 +762,22 @@ with tab1:
                 st.error(f"Prediction failed: {exc}")
 
 with tab2:
-    classifier_choice = st.radio("Classifier", ["Soil", "Crop"], horizontal=True)
+    classifier_choice_display = st.radio(
+        ui_text(lang, "classifier"),
+        [ui_text(lang, "soil"), ui_text(lang, "crop")],
+        horizontal=True,
+    )
+    classifier_choice = "Soil" if classifier_choice_display == ui_text(lang, "soil") else "Crop"
     if TENSORFLOW_IMPORT_ERROR is not None:
         st.warning(
             "TensorFlow is not available in this Python environment, so image "
             f"classification is disabled. Details: {TENSORFLOW_IMPORT_ERROR}"
         )
 
-    file = st.file_uploader("Upload image", type=["jpg", "jpeg", "png"])
+    file = st.file_uploader(ui_text(lang, "upload_image"), type=["jpg", "jpeg", "png"])
 
     if file:
-        st.image(file, caption="Uploaded image", use_container_width=True)
+        st.image(file, caption=ui_text(lang, "uploaded_image"), use_container_width=True)
         if classifier_choice == "Soil" and soil_model is not None:
             label, conf = predict_image(soil_model, file, soil_labels)
             result = f"{translate_soil(label, lang)} ({conf:.2f})"
@@ -652,11 +795,11 @@ with tab2:
             st.error(f"{classifier_choice} classifier model missing: {model_name}")
 
 with tab3:
-    land = st.number_input("Land size (acres)", min_value=0.1, value=1.0, step=0.1)
+    land = st.number_input(ui_text(lang, "land_size"), min_value=0.1, value=1.0, step=0.1)
     crop_choice = st.selectbox("Crop", list(FERTILIZER_DATA.keys()))
     soil_choice = st.selectbox("Soil", list(FERTILIZER_DATA[crop_choice].keys()))
 
-    if st.button("Calculate fertilizer", type="primary"):
+    if st.button(ui_text(lang, "calculate_fertilizer"), type="primary"):
         res = calculate_recommendation(land, crop_choice, soil_choice)
         st.success(
             f"N: {res['N']:.1f} kg, P: {res['P']:.1f} kg, K: {res['K']:.1f} kg. "
@@ -705,10 +848,10 @@ with tab4:
             st.audio(speak_result(last_message["content"], lang), format="audio/mp3")
 
 with tab5:
-    st.subheader("Yield Database")
+    st.subheader(ui_text(lang, "yield_database"))
     try:
-        st.metric("Records", count_yield_records())
-        if st.button("Import sample data"):
+        st.metric(ui_text(lang, "records"), count_yield_records())
+        if st.button(ui_text(lang, "import_sample_data")):
             total_rows = import_sample_data(replace=True)
             st.success(f"Imported {total_rows} records from sample_data.csv.")
             st.rerun()
